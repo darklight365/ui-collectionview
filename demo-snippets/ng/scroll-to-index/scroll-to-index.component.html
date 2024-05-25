@@ -3,17 +3,18 @@
     <Label text="Simple Grid"></Label>
 </ActionBar>
 
-<GridLayout>
+<StackLayout>
+    <Button (tap)="goToIndex()">Go to {{ nextIndex }} index</Button>
     <CollectionView [items]="items" (itemTap)="onItemTap($event)" (loadMoreItems)="onLoadMoreItems()"
-        colWidth="50%" layoutStyle="waterfall">
-        <ng-template let-item="item">
-            <GridLayout [height]="randomHeight(item.color)" rows="*, auto" [backgroundColor]="item.color"
-                class="item">
+        colWidth="100%" height="100%" rowHeight="200" (loaded)="onCollectionViewLoaded($event)">
+        <ng-template let-item="item" let-i="index">
+            <GridLayout rowSpan="2" rows="*, auto" [backgroundColor]="item.color" class="item">
                 <StackLayout row="1">
                     <Label row="1" [text]="item.name" class="title"></Label>
+                    <Label row="1" text="Index: {{i}}" class="title"></Label>
                     <Label row="1" [text]="item.color" class="subtitle"></Label>
                 </StackLayout>
             </GridLayout>
         </ng-template>
     </CollectionView>
-</GridLayout>
+</StackLayout>

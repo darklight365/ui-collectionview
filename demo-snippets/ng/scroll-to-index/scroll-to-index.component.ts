@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { ObservableArray } from '@nativescript/core';
 import { RouterExtensions } from '@nativescript/angular';
+import { CollectionView, SnapPosition } from '@nativescript-community/ui-collectionview';
 
 @Component({
-    selector: 'ns-collectionview-simple-waterfall',
-    templateUrl: './simple-waterfall.component.html',
+    selector: 'ns-collectionview-scroll-to-index',
+    templateUrl: './scroll-to-index.component.html',
     styleUrls: ['../styles.scss']
 })
-export class SimpleWaterfallComponent {
+export class ScrollToIndexComponent {
     constructor(private router: RouterExtensions) {}
 
     items = new ObservableArray([
@@ -32,20 +33,29 @@ export class SimpleWaterfallComponent {
         { index: 18, name: 'SILVER', color: '#bdc3c7' },
         { index: 19, name: 'ASBESTOS', color: '#7f8c8d' }
     ]);
+    nextIndex = this.getNextIndex();
+    private collectionView: CollectionView;
 
-    randomHeight(color) {
-        if (parseInt(color.substr(1), 16) % 2 === 0) {
-            return 200;
-        }
-        return 150;
+    onCollectionViewLoaded(args: any): void {
+        this.collectionView = args.object;
+        console.log('onCollectionViewLoaded');
     }
 
     onItemTap({ index, item }) {
         console.log(`EVENT TRIGGERED: Tapped on ${index} ${item.name}`);
     }
 
+    goToIndex() {
+        this.collectionView.scrollToIndex(this.nextIndex, true, SnapPosition.END);
+        this.nextIndex = this.getNextIndex();
+    }
+
     onLoadMoreItems() {
         console.log('EVENT TRIGGERED: onLoadMoreItems()');
+    }
+
+    getNextIndex() {
+        return Math.floor(Math.random() * (this.items.length - 1) + 0);
     }
 
     goBack(): void {

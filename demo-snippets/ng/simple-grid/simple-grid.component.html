@@ -4,20 +4,13 @@
 </ActionBar>
 
 <GridLayout>
-    <CollectionView 
-        
-        [items]="items"  
-        (itemTap)="onItemTap($event)" 
-        (loadMoreItems)="onLoadMoreItems()"
-        colWidth="50%" 
-        rowHeight="200"
-        automationText="collectionView"
-    >
+    <CollectionView [items]="items" (itemTap)="onItemTap($event)" (loadMoreItems)="onLoadMoreItems()"
+        colWidth="50%" rowHeight="200" (loaded)="onCollectionViewLoaded()">
         <ng-template let-item="item">
-            <GridLayout rows="*, auto" [backgroundColor]="item.color" padding="10">
+            <GridLayout rows="*, auto" [backgroundColor]="item.color" class="item">
                 <StackLayout row="1">
-                    <Label row="1" [text]="item.name" color="white" fontSize="17" fontWeight="bold"></Label>
-                    <Label row="1" [text]="item.color" color="white" fontSize="14"></Label>
+                    <Label row="1" [text]="item.name" class="title"></Label>
+                    <Label row="1" [text]="item.color" class="subtitle"></Label>
                 </StackLayout>
             </GridLayout>
         </ng-template>

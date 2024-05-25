@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { ObservableArray } from '@nativescript/core';
+import { ObservableArray, View } from '@nativescript/core';
 import { RouterExtensions } from '@nativescript/angular';
 
 @Component({
-    selector: 'ns-collectionview-simple-waterfall',
-    templateUrl: './simple-waterfall.component.html',
+    selector: 'ns-collectionview-resize-cell',
+    templateUrl: './resize-cell.component.html',
     styleUrls: ['../styles.scss']
 })
-export class SimpleWaterfallComponent {
+export class ResizeCellComponent {
     constructor(private router: RouterExtensions) {}
 
     items = new ObservableArray([
@@ -33,19 +33,22 @@ export class SimpleWaterfallComponent {
         { index: 19, name: 'ASBESTOS', color: '#7f8c8d' }
     ]);
 
-    randomHeight(color) {
-        if (parseInt(color.substr(1), 16) % 2 === 0) {
-            return 200;
+    getItemHeight(item) {
+        return item.showMenu === true ? 200 : 100;
+    }
+
+    async resizeCell(item, event) {
+        try {
+            const actualItem = item || this;
+            actualItem.showMenu = !actualItem.showMenu;
+            async function animate(options = {}) {
+                const newHeight = actualItem.showMenu ? 200 : 100;
+                return (event.object as View).animate({ height: newHeight, ...options, duration: 300 });
+            }
+            await animate();
+        } catch (error) {
+            console.error(error);
         }
-        return 150;
-    }
-
-    onItemTap({ index, item }) {
-        console.log(`EVENT TRIGGERED: Tapped on ${index} ${item.name}`);
-    }
-
-    onLoadMoreItems() {
-        console.log('EVENT TRIGGERED: onLoadMoreItems()');
     }
 
     goBack(): void {

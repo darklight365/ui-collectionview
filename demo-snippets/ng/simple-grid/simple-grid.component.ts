@@ -1,14 +1,16 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component } from '@angular/core';
+import { ObservableArray } from '@nativescript/core';
 import { RouterExtensions } from '@nativescript/angular';
 
 @Component({
     selector: 'ns-collectionview-simple-grid',
-    templateUrl: './simple-grid.component.html'
+    templateUrl: './simple-grid.component.html',
+    styleUrls: ['../styles.scss']
 })
-export class SimpleGridComponent implements OnInit {
+export class SimpleGridComponent {
     constructor(private router: RouterExtensions) {}
 
-    items = [
+    items = new ObservableArray([
         { index: 0, name: 'TURQUOISE', color: '#1abc9c' },
         { index: 1, name: 'EMERALD', color: '#2ecc71' },
         { index: 2, name: 'PETER RIVER', color: '#3498db' },
@@ -29,14 +31,10 @@ export class SimpleGridComponent implements OnInit {
         { index: 17, name: 'POMEGRANATE', color: '#c0392b' },
         { index: 18, name: 'SILVER', color: '#bdc3c7' },
         { index: 19, name: 'ASBESTOS', color: '#7f8c8d' }
-    ];
+    ]);
 
-    ngOnInit(): void {
-
-    }
-
-    goBack(): void {
-        this.router.back();
+    onCollectionViewLoaded(): void {
+        console.log('onCollectionViewLoaded');
     }
 
     onItemTap({ index, item }) {
@@ -45,5 +43,9 @@ export class SimpleGridComponent implements OnInit {
 
     onLoadMoreItems() {
         console.log('EVENT TRIGGERED: onLoadMoreItems()');
+    }
+
+    goBack(): void {
+        this.router.back();
     }
 }

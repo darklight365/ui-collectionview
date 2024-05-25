@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import { ObservableArray } from '@nativescript/core';
+import { ContentView, ObservableArray } from '@nativescript/core';
 import { RouterExtensions } from '@nativescript/angular';
+import { CollectionView } from '@nativescript-community/ui-collectionview';
 
 @Component({
-    selector: 'ns-collectionview-simple-waterfall',
-    templateUrl: './simple-waterfall.component.html',
+    selector: 'ns-collectionview-reorder',
+    templateUrl: './reorder.component.html',
     styleUrls: ['../styles.scss']
 })
-export class SimpleWaterfallComponent {
+export class ReorderComponent {
     constructor(private router: RouterExtensions) {}
 
     items = new ObservableArray([
@@ -32,12 +33,33 @@ export class SimpleWaterfallComponent {
         { index: 18, name: 'SILVER', color: '#bdc3c7' },
         { index: 19, name: 'ASBESTOS', color: '#7f8c8d' }
     ]);
+    useLongPress = false;
 
-    randomHeight(color) {
-        if (parseInt(color.substr(1), 16) % 2 === 0) {
-            return 200;
+    onItemReordered(e) {
+        console.log('onItemReordered', e.index);
+        (e.view as ContentView).opacity = 1;
+    }
+
+    onItemReorderStarting(e) {
+        console.log('onItemReorderStarting', e.index, e.view, (e.view as ContentView));
+        (e.view as ContentView).opacity = 0.7;
+    }
+
+    onTouch(item, event) {
+        if (!this.useLongPress && event.action === 'down') {
+            const pointer = event.getActivePointers()[0];
+            this.collectionView.startDragging(this.items.indexOf(item), pointer);
         }
-        return 150;
+    }
+
+    switchLongPress() {
+        this.useLongPress = !this.useLongPress;
+    }
+
+    private collectionView: CollectionView;
+    onCollectionViewLoaded(args: any): void {
+        this.collectionView = args.object;
+        console.log('onCollectionViewLoaded');
     }
 
     onItemTap({ index, item }) {

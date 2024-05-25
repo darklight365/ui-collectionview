@@ -1,14 +1,16 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component } from '@angular/core';
+import { ObservableArray } from '@nativescript/core';
 import { RouterExtensions } from '@nativescript/angular';
 
 @Component({
     selector: 'ns-collectionview-simple-templates',
-    templateUrl: './simple-templates.component.html'
+    templateUrl: './simple-templates.component.html',
+    styleUrls: ['../styles.scss']
 })
-export class SimpleTemplatesComponent implements OnInit {
+export class SimpleTemplatesComponent {
     constructor(private router: RouterExtensions) {}
 
-    items = [
+    items = new ObservableArray([
         { type: 'heading', name: 'Heading #1', color: '#bdc3c7'},
         { type: 'item', name: 'TURQUOISE', color: '#1abc9c' },
         { type: 'item', name: 'EMERALD', color: '#2ecc71' },
@@ -29,14 +31,15 @@ export class SimpleTemplatesComponent implements OnInit {
         { type: 'item', name: 'CONCRETE', color: '#95a5a6' },
         { type: 'item', name: 'ORANGE', color: '#f39c12' },
         { type: 'item', name: 'PUMPKIN', color: '#d35400' },
-    ];
+    ]);
 
-    ngOnInit(): void {
-
+    templateSelector(item: any, _index: number, _items: any[]): string {
+        return item.type;
     }
 
-    goBack(): void {
-        this.router.back();
+    spanSizeSelector(item: any, _index: number): number {
+        if (item.type === 'heading') return 2;
+        return 1;
     }
 
     onItemTap({ index, item }) {
@@ -47,16 +50,7 @@ export class SimpleTemplatesComponent implements OnInit {
         console.log('EVENT TRIGGERED: onLoadMoreItems()');
     }
 
-    templateSelector(
-        item: any,
-        _index: number,
-        _items: any[]
-    ): string {
-        return item.type;
-    }
-
-    spanSizeSelector(item: any, _index: number): number {
-        if (item.type === "heading") return 2;
-        return 1;
+    goBack(): void {
+        this.router.back();
     }
 }

@@ -1,0 +1,22 @@
+<ActionBar>
+    <NavigationButton android.systemIcon="ic_menu_back" (tap)="goBack()"></NavigationButton>
+    <Label text="Wallet"></Label>
+</ActionBar>
+
+<GridLayout rows="auto,*,auto">
+    <GridLayout height="50" android:marginTop="3">
+        <Label #refTextHeader text="Wallet" horizontalAlignment="center"></Label>
+        <Label #refShowBtn text="close" style="font-size: 24;" height="45" width="45" rotate="90" class="text-center" horizontalAlignment="right" (tap)="toggleStatus"></Label>
+    </GridLayout>
+    <CollectionView (itemTap)="onItemTap($event)" row="1" height="100%" [items]="items">
+        <ng-template let-item="item">
+            <AbsoluteLayout [height]="item.expanded ? FULL_CARD_HEIGHT: 60" width="100%">
+                <payment-card [height]="FULL_CARD_HEIGHT" [data]="item" (tap)="toggleItemHeight(item)" verticalAlignment="top" width="100%">
+                </payment-card>
+            </AbsoluteLayout>
+        </ng-template>
+    </CollectionView>
+    <FlexboxLayout #refAddBtn verticalAlignment="bottom" height="100">
+        <Label id="icon-add" text="add" height="60" width="60" class="text-center"></Label>
+    </FlexboxLayout>
+</GridLayout>
